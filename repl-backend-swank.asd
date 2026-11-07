@@ -3,7 +3,7 @@
   :description "SLIME Swank wire backend for repl-protocol"
   :author "egao1980"
   :license "MIT"
-  :depends-on ((:version "repl-protocol" "0.2.1"))
+  :depends-on ((:version "repl-protocol" "0.2.2"))
   :serial t
   :pathname "src"
   :components ((:file "package")
