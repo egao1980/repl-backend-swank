@@ -12,6 +12,7 @@
   '((:connection-info . "CONNECTION-INFO")
     (:compile-string . "COMPILE-STRING-FOR-EMACS")
     (:compile-file . "COMPILE-FILE-FOR-EMACS")
+    (:load-file . "LOAD-FILE")
     (:backtrace . "BACKTRACE")
     (:frame-locals . "FRAME-LOCALS-AND-CATCH-TAGS")
     (:frame-source-location . "FRAME-SOURCE-LOCATION")
