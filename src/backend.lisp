@@ -16,7 +16,8 @@
     (:backtrace . "BACKTRACE")
     (:frame-locals . "FRAME-LOCALS-AND-CATCH-TAGS")
     (:frame-source-location . "FRAME-SOURCE-LOCATION")
-    (:eval-in-frame . "EVAL-STRING-IN-FRAME")
+    ;; EVAL-STRING-IN-FRAME also wants echo-area LINES and WIDTH (NIL errors)
+    (:eval-in-frame . "PPRINT-EVAL-STRING-IN-FRAME")
     (:invoke-restart . "INVOKE-NTH-RESTART-FOR-EMACS")
     (:return-from-frame . "SLDB-RETURN-FROM-FRAME")
     (:restart-frame . "RESTART-FRAME")
@@ -66,9 +67,3 @@ a server writing its port to PORT-FILE."
     (let ((conn (repl-connect backend :port port)))
       (setf (connection-process conn) process)
       conn)))
-
-;; Swank's EVAL-STRING-IN-FRAME also takes LINES and WIDTH for echo-area output.
-(defmethod repl-eval-in-frame ((conn swank-connection) frame string &key package)
-  (in-debugger
-   conn (rpc conn :eval-in-frame string frame (or package "COMMON-LISP-USER") nil nil)
-   :package package))
