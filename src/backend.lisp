@@ -54,11 +54,15 @@
   (open-wire-connection 'swank-connection host port :backend backend))
 
 (defun swank-loader-forms (port-file)
-  "--eval forms that load Swank (Quicklisp when present, else ASDF) and start
-a server writing its port to PORT-FILE."
-  (list "(require :asdf)"
-        "(if (find-package :ql) (funcall (intern \"QUICKLOAD\" :ql) :swank :silent t) (asdf:load-system :swank))"
-        (format nil "(funcall (intern \"START-SERVER\" :swank) ~S :dont-close t)" port-file)))
+  "--eval forms that load Swank with ASDF and start a server writing its port
+to PORT-FILE. Swank resolves from the directory this image finds it in (the
+cl-repo install tree, ghcr.io/egao1980/cl-systems/swank), else from the child's
+own registry; never from Quicklisp."
+  (remove nil
+          (list "(require :asdf)"
+                (system-registry-form '("swank"))
+                "(asdf:load-system :swank)"
+                (format nil "(funcall (intern \"START-SERVER\" :swank) ~S :dont-close t)" port-file))))
 
 (defmethod repl-spawn ((backend swank-backend) &key (command *default-image-command*) directory env (timeout 180))
   (multiple-value-bind (port process) (spawn-image #'swank-loader-forms :command command
